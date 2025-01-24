@@ -58,9 +58,6 @@ type dialOptions struct {
 
 	disableDirect bool
 
-	// set to true to allow dialing to be non-blocking
-	unblock bool
-
 	// stats monitoring on the connections.
 	statsHandler stats.Handler
 
@@ -281,12 +278,5 @@ func WithForceDirectGRPC() DialOption {
 		o.mdnsOptions.Disable = true
 		o.webrtcOpts.Disable = true
 		o.disableDirect = false
-	})
-}
-
-// WithUnblock makes direct dialing a non-blocking operation, allowing the dial to take place in the background.
-func WithUnblock() DialOption {
-	return newFuncDialOption(func(o *dialOptions) {
-		o.unblock = true
 	})
 }
