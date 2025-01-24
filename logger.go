@@ -145,9 +145,6 @@ func LogFinalLine(logger ZapCompatibleLogger, startTime time.Time, err error, ms
 	if err == nil {
 		level = zap.DebugLevel
 	} else {
-		if level < zap.ErrorLevel {
-			level = zap.ErrorLevel
-		}
 		fields = append(fields, "error", err)
 	}
 	fields = append(fields, "grpc.code", code.String(), "grpc.time_ms", duration)
