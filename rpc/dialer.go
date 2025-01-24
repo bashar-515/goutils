@@ -243,12 +243,15 @@ func DialDirectGRPC(ctx context.Context, address string, logger utils.ZapCompati
 // dialDirectGRPC dials a gRPC server directly.
 func dialDirectGRPC(ctx context.Context, address string, dOpts dialOptions, logger utils.ZapCompatibleLogger) (ClientConn, bool, error) {
 	dialOpts := []grpc.DialOption{
-		grpc.WithBlock(), //nolint:staticcheck
 		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(MaxMessageSize)),
 		grpc.WithKeepaliveParams(keepalive.ClientParameters{
 			Time:                keepAliveTime * 2, // a little extra buffer to try to avoid ENHANCE_YOUR_CALM
 			PermitWithoutStream: true,
 		}),
+	}
+
+	if !dOpts.unblock {
+		dialOpts = append(dialOpts, grpc.WithBlock()) //nolint:staticcheck
 	}
 
 	// Use SOCKS proxy from environment as gRPC proxy dialer. Do not use
